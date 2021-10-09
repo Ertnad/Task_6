@@ -8,27 +8,27 @@ public class Main {
     public static void main(String[] args) {
         Locale.setDefault(Locale.ROOT);
 
-        double x = readVar("x");
-        double numberOfMembers = readVar("numberOfMembers");
-        double epsilon = readVar("epsilon");
+        double x = readNumber("x");
+        double sizeOfSequence = readNumber("size of Sequence");
+        double epsilon = readNumber("epsilon");
 
-        double sumOfSequence = calculateSumOfSequence(x, numberOfMembers);
+        double sumOfSequence = calculateSumOfSequence(x, sizeOfSequence);
         printResult("of N terms", sumOfSequence);
 
-        double sumOfSequenceWithEpsilon = calculateSumOfSequenceWithEpsilon(x, numberOfMembers, epsilon);
+        double sumOfSequenceWithEpsilon = calculateSumOfSequenceWithEpsilon(x, sizeOfSequence, epsilon);
         printResult("of N terms of which the absolute value of more than epsilon", sumOfSequenceWithEpsilon);
 
-        double sumOfSequenceWithEpsilonDividedBy10 = calculateSumOfSequenceWithEpsilon(x, numberOfMembers, epsilon / 10);
+        double sumOfSequenceWithEpsilonDividedBy10 = calculateSumOfSequenceWithEpsilon(x, sizeOfSequence, epsilon / 10);
         printResult("of N terms of which the absolute value of more than epsilon divided by 10",
             sumOfSequenceWithEpsilonDividedBy10);
 
-        double sumOfSequenceWithMath = Math.atan(x);
+        double sumOfSequenceWithMath = Math.cos(x);
         printResult("using Math", sumOfSequenceWithMath);
     }
 
-    private static double readVar(String name) {
+    private static double readNumber(String name) {
         Scanner scanner = new Scanner(System.in);
-        System.out.printf("Enter %s: ", name);
+        System.out.printf("Enter value %s: ", name);
         return scanner.nextDouble();
     }
 
@@ -50,26 +50,34 @@ public class Main {
         return x < 0 ? - x : x;
     }
 
+    private static double getFactorial(double n) {
+        double result = 1;
+        for (double i = 1; i <= n; i++) {
+            result = result * i;
+        }
+        return result;
+    }
+
     // Метод для получения N члена последовательности
     private static double getNMemberOfSequence(double x, int n) {
-        double numerator = pow(-1, n-1) * pow(x, 2 * n - 1); // числитель
-        double denominator = 2 * n - 1; // знаменатель
+        double numerator = pow(-1, n+1) * pow(x, 2 * n - 2); // числитель
+        double denominator = getFactorial(2 * n - 2); // знаменатель
         return numerator / denominator;
     }
 
     // Метод для подсчёта суммы n слагаемых заданного вида;
-    private static double calculateSumOfSequence(double x, double numberOfMembers) {
+    private static double calculateSumOfSequence(double x, double sizeOfSequence) {
         double sum = 0;
-        for (int i = 1; i <= numberOfMembers; i++) {
+        for (int i = 1; i <= sizeOfSequence; i++) {
             sum += getNMemberOfSequence(x, i);
         }
         return sum;
     }
 
     // Метод для подсчёта суммы тех слагаемые, которые по модулю больше e или больше e/10
-    private static double calculateSumOfSequenceWithEpsilon(double x, double numberOfMembers, double epsilon) {
+    private static double calculateSumOfSequenceWithEpsilon(double x, double sizeOfSequence, double epsilon) {
         double sum = 0;
-        for (int i = 1; i <= numberOfMembers; i++) {
+        for (int i = 1; i <= sizeOfSequence; i++) {
             double nMemberOfSequence = getNMemberOfSequence(x, i);
             if (abs(nMemberOfSequence) > epsilon) {
                 sum += getNMemberOfSequence(x, i);
